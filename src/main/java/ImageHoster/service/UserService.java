@@ -12,8 +12,14 @@ public class UserService {
     private UserRepository userRepository;
 
     //Call the registerUser() method in the UserRepository class to persist the user record in the database
-    public void registerUser(User newUser) {
-        userRepository.registerUser(newUser);
+    public boolean registerUser(User newUser) {
+        if (checkPasswordStrength(newUser.getPassword())) {
+            userRepository.registerUser(newUser);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     //Since we did not have any user in the database, therefore the user with username 'upgrad' and password 'password' was hard-coded
@@ -30,6 +36,88 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public boolean checkPasswordStrength(String password) {
+        try {
+
+            char[] passwordCharacters = password.toCharArray();
+            int count=0;
+            int count2=0;
+            int count3=0;
+            int count4=0;
+            for (char c:
+                 passwordCharacters) {
+                for (int i = 48; i < 58; i++) {
+                    if (i == c) {
+                        count++;
+                        break;
+                    }
+                }
+                if (count>0) {
+                    break;
+                }
+            }
+            for (char c:
+                    passwordCharacters) {
+                for (int i = 65; i<91; i++) {
+                    if (i == c) {
+                        count2++;
+                        break;
+                    }
+                }
+                if (count2>0) {
+                    break;
+                }
+                for (int i = 97; i<123; i++) {
+                    if (i == c) {
+                        count2++;
+                        break;
+                    }
+                }
+                if (count2>0) {
+                    break;
+                }
+            }
+
+            for (char c:
+                    passwordCharacters) {
+                for (int i = 65; i<91; i++) {
+                    if (i != c) {
+                        count3++;
+                    }
+                }
+                for (int i = 97; i<123; i++) {
+                    if (i != c) {
+                        count3++;
+                    }
+                }
+                for (int i = 48; i < 58; i++) {
+                    if (i != c) {
+                        count3++;
+                    }
+                }
+                if (count3==62) {
+                    count4++;
+                    break;
+                }
+                else {
+                    count3 = 0;
+                }
+            }
+
+
+            if (count>0&&count2>0&&count4>0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+        catch (Exception e){
+        }
+        return false;
     }
 
 }
