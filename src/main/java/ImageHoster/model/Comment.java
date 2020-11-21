@@ -30,8 +30,7 @@ public class Comment {
 
     }
 
-    public Comment(int id, String text) {
-        this.id = id;
+    public Comment(String text) {
         this.text = text;
     }
 

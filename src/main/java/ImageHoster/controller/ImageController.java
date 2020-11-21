@@ -1,5 +1,6 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
@@ -51,6 +52,7 @@ public class ImageController {
         Image image = imageService.getImageByTitle(title, id);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        model.addAttribute("comments", image.getComments());
         return "images/image";
     }
 
@@ -107,6 +109,7 @@ public class ImageController {
                 model.addAttribute("image", image);
                 model.addAttribute("tags", image.getTags());
                 model.addAttribute("editError", "Only the owner of the image can edit the image");
+                model.addAttribute("comments", image.getComments());
                 return "images/image";
             }
         }
@@ -114,9 +117,31 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
             model.addAttribute("editError", "Only the owner of the image can edit the image");
+            model.addAttribute("comments", image.getComments());
             return "images/image";
         }
     }
+
+
+
+    @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
+    public String saveComment(@PathVariable("imageId") Integer imageId, @PathVariable("imageTitle") String imageTitle, @RequestParam("comment") Comment comment, HttpSession session) throws IOException {
+        Image image = imageService.getImage(imageId);
+        User currentUser =  (User) session.getAttribute("loggeduser");
+//        Comment comment = new Comment();
+        comment.setUser(currentUser);
+        comment.setImage(image);
+//        comment.setText(commentText);
+        imageService.saveComment(comment);
+        return "redirect:/images/" + imageId +"/" + imageTitle;
+    }
+
+
+
+
+
+
+
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
     //The method receives the imageFile, imageId, updated image, along with the Http Session
@@ -168,6 +193,7 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
             model.addAttribute("deleteError", "Only the owner of the image can delete the image");
+            model.addAttribute("comments", image.getComments());
             return "images/image";
             /*
             redirectAttributes.addAttribute("imageId",imageId);

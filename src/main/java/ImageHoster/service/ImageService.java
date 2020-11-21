@@ -1,5 +1,6 @@
 package ImageHoster.service;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.repository.ImageRepository;
@@ -45,6 +46,10 @@ public class ImageService {
     //The method calls the deleteImage() method in the Repository and passes the Image id of the image to be deleted in the database
     public boolean deleteImage(Integer imageId, Integer currentUserId) {
        return imageRepository.deleteImage(imageId, currentUserId);
+    }
+
+    public void saveComment(Comment comment) {
+        imageRepository.saveComment(comment);
     }
 
 }
