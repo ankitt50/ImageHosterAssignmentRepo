@@ -44,7 +44,7 @@ public class ImageService {
     }
 
     //The method calls the deleteImage() method in the Repository and passes the Image id of the image to be deleted in the database
-    public boolean deleteImage(Integer imageId, Integer currentUserId) {
+    public Boolean deleteImage(Integer imageId, Integer currentUserId) {
        return imageRepository.deleteImage(imageId, currentUserId);
     }
 

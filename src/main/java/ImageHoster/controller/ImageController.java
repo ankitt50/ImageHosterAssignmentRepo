@@ -49,11 +49,17 @@ public class ImageController {
     //this list is then sent to 'images/image.html' file and the tags are displayed
     @RequestMapping("/images/{id}/{title}")
     public String showImage(@PathVariable("id") Integer id, @PathVariable("title") String title , Model model) {
-        Image image = imageService.getImageByTitle(title, id);
-        model.addAttribute("image", image);
-        model.addAttribute("tags", image.getTags());
-        model.addAttribute("comments", image.getComments());
-        return "images/image";
+        try {
+            Image image = imageService.getImageByTitle(title, id);
+            model.addAttribute("image", image);
+            List<Tag> tags = image.getTags();
+            model.addAttribute("tags", tags);
+            model.addAttribute("comments", image.getComments());
+            return "images/image";
+        }
+        catch (Exception e) {
+            return "redirect:/images";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'images/upload'
@@ -116,8 +122,9 @@ public class ImageController {
         catch (Exception e) {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
-            model.addAttribute("editError", "Only the owner of the image can edit the image");
             model.addAttribute("comments", image.getComments());
+            model.addAttribute("editError", "Only Images with tags can be edited." +
+                    " This image doesn't have tags.");
             return "images/image";
         }
     }
@@ -132,6 +139,7 @@ public class ImageController {
         comment.setUser(currentUser);
         comment.setImage(image);
 //        comment.setText(commentText);
+        comment.setCreatedDate(new Date());
         imageService.saveComment(comment);
         return "redirect:/images/" + imageId +"/" + imageTitle;
     }
@@ -174,7 +182,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
     }
 
 
@@ -184,6 +192,7 @@ public class ImageController {
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("loggeduser");
+//        Image image = ;
         if (imageService.deleteImage(imageId, currentUser.getId())) {
             return "redirect:/images";
         }
@@ -192,8 +201,8 @@ public class ImageController {
             Image image = imageService.getImage(imageId);
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
-            model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             model.addAttribute("comments", image.getComments());
+            model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             return "images/image";
             /*
             redirectAttributes.addAttribute("imageId",imageId);

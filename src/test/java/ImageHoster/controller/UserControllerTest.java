@@ -1,4 +1,4 @@
-/*
+
 package ImageHoster.controller;
 
 import ImageHoster.model.User;
@@ -167,4 +167,3 @@ public class UserControllerTest {
                 .andExpect(content().string(containsString("Image Hoster")));
     }
 }
-*/

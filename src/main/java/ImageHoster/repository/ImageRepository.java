@@ -6,6 +6,7 @@ import ImageHoster.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 //The annotation is a special type of @Component annotation which describes that the class defines a data repository
@@ -42,10 +43,18 @@ public class ImageRepository {
     //Returns the list of all the images fetched from the database
     public List<Image> getAllImages() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Image> query = em.createQuery("SELECT i from Image i", Image.class);
-        List<Image> resultList = query.getResultList();
-
-        return resultList;
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            TypedQuery<Image> query = em.createQuery("SELECT i from Image i", Image.class);
+            List<Image> resultList = query.getResultList();
+            transaction.commit();
+            return resultList;
+        }
+        catch (Exception e) {
+            transaction.rollback();
+            return new ArrayList<Image>();
+        }
     }
 
     //The method creates an instance of EntityManager
@@ -54,12 +63,17 @@ public class ImageRepository {
     //Returns null if no image is found in the database
     public Image getImageByTitle(String title, Integer id) {
         EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
         try {
+            transaction.begin();
             TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i " +
                     "where i.title =:title " +
                     "and i.id =:id", Image.class).setParameter("title", title).setParameter("id", id);
-            return typedQuery.getSingleResult();
+            Image image = typedQuery.getSingleResult();
+            transaction.commit();
+            return image;
         } catch (NoResultException nre) {
+            transaction.rollback();
             return null;
         }
     }
@@ -69,13 +83,18 @@ public class ImageRepository {
     //Returns the image fetched from the database
     public Image getImage(Integer imageId) {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i " +
-                "where i.id =:imageId", Image.class).setParameter("imageId", imageId);
+        EntityTransaction transaction = em.getTransaction();
+
         try {
+            transaction.begin();
+            TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i " +
+                    "where i.id =:imageId", Image.class).setParameter("imageId", imageId);
             Image image = typedQuery.getSingleResult();
+            transaction.commit();
             return image;
         }
         catch (Exception e) {
+            transaction.rollback();
             return null;
         }
 
@@ -107,15 +126,17 @@ public class ImageRepository {
     //If you use remove() method on the object which is not in persistent state, an exception is thrown
     //The transaction is committed if it is successful
     //The transaction is rolled back in case of unsuccessful transaction
-    public boolean deleteImage(Integer imageId, Integer currentUserId) {
+    public Boolean deleteImage(Integer imageId, Integer currentUserId) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Integer imageUserId = -1;
+//        Image image = null;
         try {
             transaction.begin();
             Image image = em.find(Image.class, imageId);
             imageUserId = image.getUser().getId();
             transaction.commit();
+
         } catch (Exception e) {
             transaction.rollback();
         }
