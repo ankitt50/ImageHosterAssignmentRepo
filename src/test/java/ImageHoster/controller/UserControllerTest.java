@@ -82,12 +82,10 @@ public class UserControllerTest {
     public void signupWithCorrectPasswordType() throws Exception {
         User user = new User();
         UserProfile userProfile = new UserProfile();
-//        userProfile.setId(1);
         userProfile.setEmailAddress("a@gmail.com");
         userProfile.setFullName("Abhi Mahajan");
         userProfile.setMobileNumber("9876543210");
         user.setProfile(userProfile);
-//        user.setId(1);
         user.setUsername("Abhi");
         user.setPassword("password1@");
 
@@ -97,7 +95,6 @@ public class UserControllerTest {
                 .flashAttr("user", user)
         )
                 .andExpect(view().name("redirect:/users/login"));
-//                .andExpect(content().string(containsString("Please Login:")));
     }
 
     //This test checks the controller logic for user signin when user requests for a signin form where he can enter the username and password and checks whether the logic returns the html file 'users/login.html'

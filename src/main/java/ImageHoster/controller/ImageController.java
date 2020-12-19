@@ -30,7 +30,7 @@ public class ImageController {
     private TagService tagService;
 
     //This method displays all the images in the user home page after successful login
-    @RequestMapping("images")
+    @RequestMapping("/images")
     public String getUserImages(Model model) {
         List<Image> images = imageService.getAllImages();
         model.addAttribute("images", images);
@@ -38,7 +38,7 @@ public class ImageController {
     }
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
-    //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
+    //The logic is to get the image from the database with corresponding title. After getting the image from the database the details are shown
     //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
     //Call the getImageByTitle() method in the business logic to fetch all the details of that image
     //Add the image in the Model type object with 'image' as the key
@@ -181,7 +181,6 @@ public class ImageController {
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("loggeduser");
-//        Image image = ;
         if (imageService.deleteImage(imageId, currentUser.getId())) {
             return "redirect:/images";
         }
