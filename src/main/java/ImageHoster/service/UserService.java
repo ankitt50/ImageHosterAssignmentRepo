@@ -38,14 +38,18 @@ public class UserService {
         }
     }
 
+    // checks for all the password requirements : password entered by the user
+    // must contain at least 1 alphabet (a-z or A-Z), 1 number (0-9)
+    // and 1 special character (any character other than a-z, A-Z and 0-9)
     public boolean checkPasswordStrength(String password) {
         try {
-
             char[] passwordCharacters = password.toCharArray();
             int count=0;
             int count2=0;
             int count3=0;
             int count4=0;
+
+            // first for-loop checks for the numbers (0-9)
             for (char c:
                  passwordCharacters) {
                 for (int i = 48; i < 58; i++) {
@@ -58,6 +62,8 @@ public class UserService {
                     break;
                 }
             }
+            // second for-loop checks for the Capital alphabets (A-Z)
+
             for (char c:
                     passwordCharacters) {
                 for (int i = 65; i<91; i++) {
@@ -69,6 +75,9 @@ public class UserService {
                 if (count2>0) {
                     break;
                 }
+
+                // Third for-loop checks for the Small alphabets (a-z)
+
                 for (int i = 97; i<123; i++) {
                     if (i == c) {
                         count2++;
@@ -79,6 +88,8 @@ public class UserService {
                     break;
                 }
             }
+
+            // Last for-loop checks for the Special Characters
 
             for (char c:
                     passwordCharacters) {
@@ -106,11 +117,12 @@ public class UserService {
                 }
             }
 
-
+            // if all types of characters are present in the password, return
+            // true, since password is valid
             if (count>0&&count2>0&&count4>0) {
                 return true;
             }
-            else {
+            else { // else return false, i.e password is invalid
                 return false;
             }
 
