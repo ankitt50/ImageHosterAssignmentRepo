@@ -135,10 +135,8 @@ public class ImageController {
     public String saveComment(@PathVariable("imageId") Integer imageId, @PathVariable("imageTitle") String imageTitle, @RequestParam("comment") Comment comment, HttpSession session) throws IOException {
         Image image = imageService.getImage(imageId);
         User currentUser =  (User) session.getAttribute("loggeduser");
-//        Comment comment = new Comment();
         comment.setUser(currentUser);
         comment.setImage(image);
-//        comment.setText(commentText);
         comment.setCreatedDate(new Date());
         imageService.saveComment(comment);
         return "redirect:/images/" + imageId +"/" + imageTitle;
@@ -204,10 +202,6 @@ public class ImageController {
             model.addAttribute("comments", image.getComments());
             model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             return "images/image";
-            /*
-            redirectAttributes.addAttribute("imageId",imageId);
-            return "redirect:/editImage";
-            */
         }
     }
 

@@ -15,6 +15,9 @@ public class HomeController {
     @Autowired
     private ImageService imageService;
 
+    // This method returns index.html page, which is the home page of the application.
+    // User is shown this page, if they aren't logged in.
+    // They can see registration and login options on top.
     @RequestMapping("/")
     public String getAllImages(Model model) {
         List<Image> images = imageService.getAllImages();
