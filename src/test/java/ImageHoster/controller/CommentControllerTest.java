@@ -1,11 +1,11 @@
-/*
+
 package ImageHoster.controller;
 
 
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
-import ImageHoster.service.CommentService;
+//import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,13 +28,15 @@ public class CommentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private CommentService commentService;
+//    @MockBean
+//    private CommentService commentService;
 
     @MockBean
     private ImageService imageService;
 
-    //This test checks controller logic for comment and checks whether the controller logic redirects to the request handling method with request mapping of type "/images/{imageId}/{title}"
+    //This test checks controller logic for comment and checks whether
+    // the controller logic redirects to the request handling method with
+    // request mapping of type "/images/{imageId}/{title}"
     @Test
     public void createComment() throws Exception {
         User user = new User();
@@ -65,5 +67,3 @@ public class CommentControllerTest {
                 .andExpect(redirectedUrl("/images/1/new"));
     }
 }
-
- */

@@ -131,19 +131,6 @@ public class ImageController {
 
 
 
-    @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
-    public String saveComment(@PathVariable("imageId") Integer imageId, @PathVariable("imageTitle") String imageTitle, @RequestParam("comment") Comment comment, HttpSession session) throws IOException {
-        Image image = imageService.getImage(imageId);
-        User currentUser =  (User) session.getAttribute("loggeduser");
-        comment.setUser(currentUser);
-        comment.setImage(image);
-        comment.setCreatedDate(new Date());
-        imageService.saveComment(comment);
-        return "redirect:/images/" + imageId +"/" + imageTitle;
-    }
-
-
-
 
 
 
