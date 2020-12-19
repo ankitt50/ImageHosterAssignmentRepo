@@ -123,8 +123,7 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags", image.getTags());
             model.addAttribute("comments", image.getComments());
-            model.addAttribute("editError", "Only Images with tags can be edited." +
-                    " This image doesn't have tags.");
+            model.addAttribute("editError", "Only the owner of the image can edit the image");
             return "images/image";
         }
     }

@@ -5,7 +5,6 @@ package ImageHoster.controller;
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
-//import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +27,6 @@ public class CommentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-//    @MockBean
-//    private CommentService commentService;
 
     @MockBean
     private ImageService imageService;
