@@ -3,6 +3,8 @@ package ImageHoster.controller;
 
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
+import ImageHoster.repository.ImageRepository;
+import ImageHoster.repository.UserRepository;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.UserService;
 import org.junit.Test;
@@ -35,7 +37,13 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
     private ImageService imageService;
+
+    @MockBean
+    private ImageRepository imageRepository;
 
     //This test checks the controller logic for user signup when user requests for a registration form and checks whether the logic returns the html file 'users/registration.html'
     @Test
@@ -67,26 +75,29 @@ public class UserControllerTest {
                 .andExpect(model().attribute("passwordTypeError", equalTo("Password must contain atleast 1 alphabet, 1 number & 1 special character")));
     }
 
-    //This test checks the controller logic for user signup when user fills the form and send the POST request to the server with the correct password type and checks whether the logic returns the html file 'users/login.html'
+    //This test checks the controller logic for user signup when user fills the form and
+    // send the POST request to the server with the correct
+    // password type and checks whether the logic returns the html file 'users/login.html'
     @Test
     public void signupWithCorrectPasswordType() throws Exception {
         User user = new User();
         UserProfile userProfile = new UserProfile();
-        userProfile.setId(1);
+//        userProfile.setId(1);
         userProfile.setEmailAddress("a@gmail.com");
         userProfile.setFullName("Abhi Mahajan");
         userProfile.setMobileNumber("9876543210");
         user.setProfile(userProfile);
-        user.setId(1);
+//        user.setId(1);
         user.setUsername("Abhi");
         user.setPassword("password1@");
 
+        Mockito.when(userService.registerUser(Mockito.any(User.class))).thenReturn(true);
 
         this.mockMvc.perform(post("/users/registration")
                 .flashAttr("user", user)
         )
-                .andExpect(view().name("users/login"))
-                .andExpect(content().string(containsString("Please Login:")));
+                .andExpect(view().name("redirect:/users/login"));
+//                .andExpect(content().string(containsString("Please Login:")));
     }
 
     //This test checks the controller logic for user signin when user requests for a signin form where he can enter the username and password and checks whether the logic returns the html file 'users/login.html'

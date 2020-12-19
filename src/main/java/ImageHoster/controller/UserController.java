@@ -3,6 +3,7 @@ package ImageHoster.controller;
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
+import ImageHoster.repository.UserRepository;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,23 @@ public class UserController {
         return "users/registration";
     }
 
-    //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
-    //This method calls the business logic and after the user record is persisted in the database, directs to login page
+    //This controller method is called when the request pattern is of type
+    // 'users/registration' and also the incoming request is of POST type
+    //This method calls the business logic and after the user record is
+    // persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
     public String registerUser(User user, Model model) {
-        if (userService.registerUser(user)) {
+        Boolean registration = userService.registerUser(user);
+        System.out.println("--------> "+registration+" <--------");
+        if (registration) {
+            // A new user can register in the application by entering the details
+            // such as username, password, full name, email address, and
+            //mobile number, and after the successful registration,
+            //he is redirected to the login page.
             return "redirect:/users/login";
         }
         else {
+
             User newUser = new User();
             UserProfile profile = new UserProfile();
             user.setProfile(profile);

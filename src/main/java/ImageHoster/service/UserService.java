@@ -11,9 +11,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     //Call the registerUser() method in the UserRepository class to persist the user record in the database
     public boolean registerUser(User newUser) {
-        if (checkPasswordStrength(newUser.getPassword())) {
+        System.out.println("--------> "+" UserService Method called "+" <--------");
+        System.out.println("--------> "+this.userRepository+" <--------");
+        Boolean passwordStrength = checkPasswordStrength(newUser.getPassword());
+        System.out.println("--------> password Strength : "+passwordStrength+" <--------");
+        if (passwordStrength) {
             userRepository.registerUser(newUser);
             return true;
         }
@@ -42,6 +47,7 @@ public class UserService {
     // must contain at least 1 alphabet (a-z or A-Z), 1 number (0-9)
     // and 1 special character (any character other than a-z, A-Z and 0-9)
     public boolean checkPasswordStrength(String password) {
+        System.out.println("--------> "+" checkPasswordStrength Method called "+" <--------");
         try {
             char[] passwordCharacters = password.toCharArray();
             int count=0;

@@ -5,6 +5,7 @@ import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
 import ImageHoster.model.UserProfile;
+import ImageHoster.repository.ImageRepository;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.junit.Test;
@@ -36,6 +37,9 @@ public class ImageControllerTest {
 
     @MockBean
     private ImageService imageService;
+
+    @MockBean
+    private ImageRepository imageRepository;
 
     @MockBean
     private TagService tagService;
@@ -86,7 +90,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.getImageByTitle("new",1)).thenReturn(image);
 
         this.mockMvc.perform(get("/images/1/new").session(session))
                 .andExpect(view().name("images/image"))
@@ -257,7 +261,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Mockito.when(imageService.deleteImage(1,1)).thenReturn(true);
 
         this.mockMvc.perform(delete("/deleteImage")
                 .param("imageId", "1")

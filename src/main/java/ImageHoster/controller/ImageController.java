@@ -82,6 +82,11 @@ public class ImageController {
     @RequestMapping(value = "/images/upload", method = RequestMethod.POST)
     public String createImage(@RequestParam("file") MultipartFile file, @RequestParam("tags") String tags, Image newImage, HttpSession session) throws IOException {
 
+
+        //A user can also upload the image by entering the
+        //details such as image title, description, image file, and tags related to the image
+
+
         User user = (User) session.getAttribute("loggeduser");
         newImage.setUser(user);
         String uploadedImageData = convertUploadedFileToBase64(file);
