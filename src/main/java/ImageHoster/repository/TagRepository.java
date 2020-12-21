@@ -10,6 +10,11 @@ public class TagRepository {
     @PersistenceUnit(unitName = "imageHoster")
     private EntityManagerFactory emf;
 
+    //The method receives the Tag class object
+    // which needs to be added in the database
+    //Creates an instance of EntityManager
+    //Starts a transaction
+    // save the instance in DB by using persist() method.
     public Tag createTag(Tag tag) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -24,6 +29,9 @@ public class TagRepository {
         return tag;
     }
 
+    //The method creates an instance of EntityManager
+    //Executes JPQL query to fetch the tag from the database with corresponding name.
+    //Returns the tag fetched from the database
     public Tag findTag(String tagName) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();

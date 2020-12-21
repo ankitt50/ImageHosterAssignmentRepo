@@ -122,15 +122,13 @@ public class ImageRepository {
     //Creates an instance of EntityManager
     //Starts a transaction
     //Get the image with corresponding image id from the database
-    //This changes the state of the image model from detached state to persistent state, which is very essential to use the remove() method
-    //If you use remove() method on the object which is not in persistent state, an exception is thrown
-    //The transaction is committed if it is successful
-    //The transaction is rolled back in case of unsuccessful transaction
+    // Compares whether the Current user owns this image or not and,
+    // then call deleteImage() method which deletes the image with the given Id,
+    // only if user owns the image.
     public Boolean deleteImage(Integer imageId, Integer currentUserId) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Integer imageUserId = -1;
-//        Image image = null;
         try {
             transaction.begin();
             Image image = em.find(Image.class, imageId);
@@ -140,7 +138,8 @@ public class ImageRepository {
         } catch (Exception e) {
             transaction.rollback();
         }
-        if (imageUserId.equals(currentUserId)) {
+        if (imageUserId.equals(currentUserId)) { // Compares whether
+            // the Current user owns this image or not
             deleteImage(imageId);
             return true;
         }
@@ -149,6 +148,7 @@ public class ImageRepository {
         }
     }
 
+    // this method deletes the image with a given image Id.
     public void deleteImage(Integer imageId) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -163,6 +163,12 @@ public class ImageRepository {
         }
     }
 
+
+    //The method receives the comment object
+    // which needs to be added in the database
+    //Creates an instance of EntityManager
+    //Starts a transaction
+    // save the instance in DB by using persist() method.
     public void saveComment(Comment comment) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
